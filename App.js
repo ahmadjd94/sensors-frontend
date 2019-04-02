@@ -1,5 +1,7 @@
 import React from 'react';
 import { StyleSheet, View , TextInput, Button} from 'react-native';
+import {host} from './settings';
+const axios = require('axios')
 
 export default class App extends React.Component {
   constructor(props) {
@@ -10,6 +12,23 @@ export default class App extends React.Component {
 
      };
   }
+
+  loginApi() {
+    axios.post(`${host}/user`, {
+      firstName: 'Fred',
+      lastName: 'Flintstone'
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log("Got a freaking error");
+      console.log(error);
+    });
+  }
+  
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -27,7 +46,7 @@ export default class App extends React.Component {
       />
 
       <Button
-        // onPress={onPressLearnMore}
+        onPress={this.loginApi}
         title="Login"
         color="#841584"
         accessibilityLabel="Login to the service"
