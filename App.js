@@ -22,7 +22,7 @@ let formatTime=(dateTaken)=>{
 class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       username: '',
       password: '',
@@ -34,41 +34,34 @@ class HomeScreen extends React.Component {
   getToken = async () => {
     try {
       const value = await AsyncStorage.getItem('@token')
-      if(value !== null) {
+      if(value != null) {
         return true
       }
     } catch(e) {
       return false
     }
   }
-
   
-    loginApi= async () =>{
     
-    axios.post(`${host}/users-api/login`, {
-      username: this.state.username,
-      password: this.state.password
-    })
-    .then(function (response) {
-      console.log("!@#@!#@!#@!#!"); //todo store token into cache
-      storeData = async () => {
-        try {
-          await AsyncStorage.setItem('@token', 'true')
-        } catch (e) {
-          // saving error
-        }
-      }
-      this.setState({token:true})
-    })
-    .catch(function (error) {
-      console.log(error.toString())
-
-      Alert.alert("wrong username or password")
-      return false;
-    });
-  }
   
   render() {
+    loginApi= () =>{
+    
+      axios.post(`${host}/users-api/login`, {
+        username: this.state.username,
+        password: this.state.password
+      })
+      .then( function(response) {
+         return true
+        })
+      .catch(function (error) {
+        console.log(error.toString())
+  
+        return false;
+      });
+    }
+
+
     let pic = {
       uri: 'data:image/jpeg;base64,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'
     };
@@ -106,16 +99,19 @@ class HomeScreen extends React.Component {
 
        <TouchableHighlight
             style={[styles.buttonContainer, styles.loginButton]} 
-            onPress={ async () => {
-              this.loginApi;
-              const retrievedItem = await AsyncStorage.getItem("@token");
-              console.log(retrievedItem)
-              this.getToken().then(token =>{console.log(token)})
-              if (this.getToken.resolve ==true){
-                this.props.navigation.navigate('Rooms')}
-            }
-              
-            } >
+            onPress={ () => {
+              // const result =   loginApi ()
+                  // console.log(result)
+                  this.props.navigation.navigate('Rooms')
+
+                
+                {
+                  Alert.alert("wrong username or password")
+                }
+                }
+            } 
+          
+               >
             <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
 
@@ -232,9 +228,14 @@ class RoomsView extends React.Component {
     this.state.currentState.forEach(element => {
         console.log(element.name)
         elements.push(
-                <CardItem header>
+                <CardItem header key={element.id}>
                   <Button
                   title = {element.name} 
+                  onPress={ () =>{
+                    // await AsyncStorage.setItem("@currentRoom",element.id.toString())
+
+                    this.props.navigation.navigate('RoomView',{"sensorId":element.id})
+                  }}
                   />
                  
                 </CardItem>
@@ -247,7 +248,11 @@ class RoomsView extends React.Component {
          <Text>Rooms: </Text>
          <Button 
                    color="#00b5ec"
-                   onPress={() => this.props.navigation.navigate('RoomView')}
+                   onPress={async () => {
+                     
+
+                  }
+                }
                    title="Back to Rooms"/>
 
      </View>
@@ -306,7 +311,7 @@ class RoomView extends React.Component {
         elements.push(
                 <CardItem header>
                   <Text>
-                      NAME : {element.name} 
+                      Temperature : {element.temperature} 
                   </Text> 
                  
                 </CardItem>
@@ -319,7 +324,8 @@ class RoomView extends React.Component {
          <Text>Room 1: </Text>
          <Button 
                    color="#00b5ec"
-                   onPress={() => this.props.navigation.navigate('Rooms')}
+                   onPress={ () => {
+                     this.props.navigation.navigate('Rooms')}}
                    title="Back to Rooms"/>
 
      </View>
@@ -340,7 +346,8 @@ class RoomView extends React.Component {
 
 UNSAFE_componentWillMount =async () => {
 var currentState = [];
-let res = await axios.get(host+'/sensors');
+console.log(this.props.navigation.state.params.sensorId)
+let res = await axios.get(`${host}/sensors/${this.props.navigation.state.params.sensorId}/records`);
 let data  = await res.data;
 var k = 1
 
